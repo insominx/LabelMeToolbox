@@ -6,15 +6,15 @@ function v = xml2struct(xml)
 
 
 xml = char(xml(:)');
-xml = strrep(xml, char(10), '');
-xml = strrep(xml, char(13), '');
-xml = strrep(xml, '!', '');
+xml = strrep(xml, char(10), ''); % removes linefeeds LF
+xml = strrep(xml, char(13), ''); % removes carriage returns CR
+xml = strrep(xml, '!', '');      % removes !
 
 % This is compatible Matlab 6.5
 % first replace entries <tag/> by <tag></tag>
 je = strfind(xml, '/>');
 while ~isempty(je)
-    jo = strfind(xml, '<');
+    jo = strfind(xml, '<'); % indices where '<' is located in xml
     l = jo(max(find(jo < je(1))));
     tok = xml(l+1:je(1)-1);
     xml = strrep(xml, sprintf('<%s/>', char(tok)), sprintf('<%s></%s>', char(tok), char(tok)));
